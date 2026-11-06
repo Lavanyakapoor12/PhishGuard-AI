@@ -1,0 +1,25 @@
+
+# Python virtual environment
+venv/
+.venv/
+
+# Python temporary files
+__pycache__/
+*.pyc
+
+# Environment variables and passwords
+.env
+.env.*
+
+# Database files
+*.db
+
+# Machine Learning generated models
+*.pkl
+*.joblib
+
+# Testing cache
+.pytest_cache/
+
+# VS Code local settings
+.vscode/
