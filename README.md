@@ -1,235 +1,343 @@
 
-# PhishGuard AI - AI-Powered Phishing URL Detection System
+# 🛡️ PhishGuard AI
+### AI-Powered Phishing URL Detection System
 
-## 1. About the Project
+PhishGuard AI is a machine-learning-based web application that detects whether a URL is potentially phishing or legitimate.
 
-PhishGuard AI is an AI-powered phishing URL detection system that identifies whether a given website URL is legitimate or potentially phishing.
+Phishing websites are designed to steal sensitive information such as passwords, banking details, and personal data. PhishGuard AI analyzes URL patterns using a trained Machine Learning model and provides a prediction through a simple web dashboard.
 
-Phishing websites are created by attackers to steal sensitive information such as passwords, banking details, and personal data.
+🌐 **Live Demo:** https://phishguard-ai-2lw.pages.dev/
 
-This project uses Machine Learning to analyze URL patterns and predict whether a URL is safe or suspicious.
+🔗 **Backend API:** https://phishguard-ai-f65t.onrender.com/
 
-The system provides a simple web dashboard where users can enter a URL and get the prediction result.
+📂 **GitHub Repository:** https://github.com/Lavanyakapoor12/PhishGuard-AI
 
-## 2. Key Features
+---
+
+## ✨ Key Features
 
 - AI-based phishing URL detection.
-- Machine Learning model using TF-IDF and Logistic Regression.
+- Character-level TF-IDF with Logistic Regression.
 - Real-time URL scanning through a web interface.
-- FastAPI backend for handling predictions.
+- Prediction results with phishing probability.
+- FastAPI backend for prediction processing.
 - PostgreSQL database for storing scan history.
-- Dashboard showing scan statistics.
+- Dashboard with scan statistics and analytics.
 - Search and filter options for previous scans.
 - REST API with Swagger documentation.
+- Responsive design for desktop and mobile devices.
 - Automated API testing using Pytest.
-- Docker support for running the complete application.
+- Docker and Docker Compose support.
+- GitHub Actions CI workflow.
 
-## 3. Technologies Used
+---
 
-Frontend:
-- React.js
-- Vite
-- CSS
-- Recharts
+## 🛠️ Technologies Used
 
-Backend:
-- Python
-- FastAPI
-- Pydantic
+| Area | Technologies |
+|---|---|
+| Frontend | React.js, Vite, CSS |
+| Charts | Recharts |
+| Backend | Python, FastAPI, Pydantic |
+| Machine Learning | Scikit-learn, TF-IDF, Logistic Regression |
+| Database | PostgreSQL, SQLAlchemy |
+| Model Management | Joblib |
+| Testing | Pytest, HTTPX |
+| DevOps | Docker, Docker Compose, GitHub Actions |
+| Deployment | Cloudflare Pages, Render, Neon PostgreSQL |
+| Version Control | Git and GitHub |
 
-Machine Learning:
-- Scikit-learn
-- TF-IDF Vectorization
-- Logistic Regression
-- Joblib
+---
 
-Database:
-- PostgreSQL
-- SQLAlchemy
+## 🤖 Machine Learning Model
 
-Testing:
-- Pytest
+PhishGuard AI uses a **character-level TF-IDF vectorizer combined with a Logistic Regression classifier**.
 
-DevOps and Deployment:
-- Docker
-- Docker Compose
-- Git
-- GitHub
+The model analyzes character patterns in URLs and predicts one of two classes:
 
-## 4. Machine Learning Model
+- **Legitimate:** The URL is predicted as legitimate.
+- **Phishing:** The URL is predicted as potentially phishing.
 
-PhishGuard AI uses a character-level TF-IDF vectorizer combined with a Logistic Regression classifier.
+### Dataset
 
-The model learns patterns from website URLs and uses those patterns to classify URLs into two categories:
+The project uses the PhiUSIIL Phishing URL Dataset from the UCI Machine Learning Repository.
 
-- Legitimate: The URL is predicted to be legitimate.
-- Phishing: The URL is predicted to be potentially dangerous.
+| Dataset Details | Count |
+|---|---:|
+| Total records | 235,795 |
+| Legitimate URLs | 134,850 |
+| Phishing URLs | 100,945 |
 
-Dataset used:
-PhiUSIIL Phishing URL Dataset from the UCI Machine Learning Repository.
+### Model Performance
 
-Dataset information:
-- Total records: 235,795
-- Legitimate URLs: 134,850
-- Phishing URLs: 100,945
+| Metric | Result |
+|---|---:|
+| Test accuracy | 99.66% |
 
-The model achieved approximately 99.66% accuracy on the held-out test split used during evaluation.
+The reported accuracy was measured on a held-out test split of the dataset.
 
-Note: This accuracy is based on the dataset split and does not guarantee the same performance on real-world URLs.
+**Important:** This result does not guarantee the same performance on new or real-world URLs. Further testing on unseen domains and external datasets is needed.
 
-Dataset source:
+Dataset source:  
 https://archive.ics.uci.edu/dataset/967/phiusiil+phishing+url+dataset
 
-## 5. How the Project Works
+Dataset citation: Prasad and Chandra (2024).
 
-1. The user enters a website URL in the frontend.
+---
+
+## ⚙️ How the Project Works
+
+1. The user enters a website URL in the React frontend.
 2. React sends the URL to the FastAPI backend.
-3. The backend passes the URL to the trained Machine Learning model.
-4. The model analyzes the URL and predicts whether it is phishing or legitimate.
-5. The prediction result is displayed on the dashboard.
-6. The scan details are stored in the PostgreSQL database.
-7. Users can view previous scans and dashboard statistics.
+3. The backend validates the submitted URL.
+4. The trained Machine Learning model analyzes its URL text.
+5. The model predicts whether the URL is phishing or legitimate.
+6. The prediction and phishing probability are returned to the frontend.
+7. Scan details are stored in PostgreSQL.
+8. Users can view their previous scans and dashboard statistics.
 
-Important: The system analyzes the URL text. It does not open or visit the submitted website.
+**Security note:** The application analyzes URL text. It does not open or visit the submitted website.
 
-## 6. Project Structure
+---
 
+## 🏗️ Project Architecture
+
+```text
+                 USER
+                   |
+                   v
+            REACT FRONTEND
+              (Vite + CSS)
+                   |
+                   | HTTP Request
+                   v
+             FASTAPI BACKEND
+                   |
+          +--------+--------+
+          |                 |
+          v                 v
+    ML MODEL              DATABASE
+ TF-IDF + Logistic       PostgreSQL
+  Regression            (Neon)
+          |                 |
+          +--------+--------+
+                   |
+                   v
+             PREDICTION
+                   |
+                   v
+             WEB DASHBOARD
+```
+
+---
+
+## 📁 Project Structure
+
+```text
 PhishGuard-AI/
+│
+├── backend/
+│   ├── main.py
+│   ├── database.py
+│   ├── models.py
+│   └── Dockerfile
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── Dockerfile
+│
+├── ml/
+│   ├── train_url_model.py
+│   └── phishguard_url_model.pkl
+│
+├── dataset/
+│   ├── download_dataset.py
+│   └── selected_features.csv
+│
+├── tests/
+│   └── test_api.py
+│
+├── deployment/
+│
+├── .github/
+│   └── workflows/
+│
+├── docker-compose.yml
+├── requirements.txt
+├── .env.example
+├── .gitignore
+└── README.md
+```
 
-- backend/
-  - main.py
-  - database.py
-  - models.py
-  - Dockerfile
+---
 
-- frontend/
-  - src/
-  - public/
-  - Dockerfile
+## 🚀 Live Deployment
 
-- ml/
-  - train_url_model.py
-  - phishguard_url_model.pkl
+The application is deployed using free-tier cloud services.
 
-- dataset/
-  - download_dataset.py
-  - selected_features.csv
+| Component | Platform |
+|---|---|
+| Frontend | Cloudflare Pages |
+| Backend | Render |
+| Database | Neon PostgreSQL |
 
-- tests/
-  - test_api.py
+**Live Application:**  
+https://phishguard-ai-2lw.pages.dev/
 
-- deployment/
+**Backend API:**  
+https://phishguard-ai-f65t.onrender.com/
 
-- docker-compose.yml
-- requirements.txt
-- .env.example
-- .gitignore
-- README.md
+**API Documentation:**  
+https://phishguard-ai-f65t.onrender.com/docs
 
-## 7. How to Run the Project Locally
+Note: The free Render backend may take some time to respond after a period of inactivity.
 
-Prerequisites:
+---
 
-- Python installed
-- Node.js and npm installed
-- PostgreSQL installed
-- Git installed
+## 💻 Run the Project Locally
 
-Step 1: Clone the repository
+### Prerequisites
 
+Install the following tools:
+
+- Python
+- Node.js and npm
+- PostgreSQL
+- Git
+- Docker Desktop (optional)
+
+### Step 1: Clone the repository
+
+```bash
 git clone https://github.com/Lavanyakapoor12/PhishGuard-AI.git
+```
 
-Step 2: Open the project folder
+### Step 2: Open the project folder
 
+```bash
 cd PhishGuard-AI
+```
 
-Step 3: Create a Python virtual environment
+### Step 3: Create a Python virtual environment
 
+```bash
 python -m venv venv
+```
 
-Step 4: Activate the environment
+### Step 4: Activate the environment
 
-Windows:
+Windows PowerShell:
 
-venv\Scripts\activate
+```powershell
+venv\Scripts\Activate.ps1
+```
 
-Step 5: Install Python dependencies
+### Step 5: Install Python dependencies
 
+```bash
 pip install -r requirements.txt
+```
 
-Step 6: Configure environment variables
+### Step 6: Configure environment variables
 
-Create a .env file in the root folder.
+Create a `.env` file in the root project folder.
 
-Add your own PostgreSQL database details:
+Add your own PostgreSQL credentials:
 
+```env
 DB_USER=your_database_username
 DB_PASSWORD=your_private_password
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=phishguard_db
+```
 
-Step 7: Start the backend
+Never upload your actual `.env` file or database credentials to GitHub.
 
+### Step 7: Start the backend
+
+From the project root:
+
+```bash
 uvicorn backend.main:app --reload
+```
 
-Backend URL:
+Backend:
+
 http://127.0.0.1:8000
 
-API documentation:
+Swagger API documentation:
+
 http://127.0.0.1:8000/docs
 
-Step 8: Start the frontend
+### Step 8: Start the frontend
 
-Open another terminal.
+Open another terminal:
 
+```bash
 cd frontend
+```
 
 Install frontend dependencies:
 
+```bash
 npm install
+```
+
+Create `frontend/.env.local` and configure the backend URL:
+
+```env
+VITE_API_URL=http://127.0.0.1:8000
+```
 
 Start the frontend:
 
+```bash
 npm run dev
+```
 
-Frontend URL:
-http://localhost:5173
+Open the local URL displayed in your terminal.
 
-## 8. Run Using Docker
+---
 
-Docker makes it possible to run the frontend, backend, and database together.
+## 🐳 Run Using Docker
 
-Make sure Docker Desktop is installed and running.
+Make sure Docker Desktop is running.
 
-From the project root folder, execute:
+From the project root, execute:
 
+```bash
 docker compose up -d --build
+```
 
-To check running containers:
+Check running containers:
 
+```bash
 docker compose ps
+```
 
-To view backend logs:
+View backend logs:
 
+```bash
 docker compose logs backend --tail 40
+```
 
 Open the application:
 
-Frontend:
-http://localhost:5173
+- Frontend: http://localhost:5173
+- Backend: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
 
-Backend:
-http://localhost:8000
+Stop the containers:
 
-API documentation:
-http://localhost:8000/docs
-
-To stop the containers:
-
+```bash
 docker compose down
+```
 
-## 9. Testing
+---
+
+## 🧪 Testing
 
 The project includes automated API tests using Pytest.
 
@@ -246,39 +354,49 @@ The tests cover:
 - File URL validation.
 - Maximum URL length validation.
 
-Run the tests using:
+Run the tests:
 
+```bash
 python -m pytest tests/test_api.py -v
+```
 
-Current test result: 10 tests passed.
+**Latest reported result: 10 tests passed.**
 
-## 10. Security Considerations
+The project also uses GitHub Actions to run automated tests through a CI workflow.
+
+---
+
+## 🔐 Security Considerations
 
 - The system analyzes URL text without visiting the submitted website.
 - URL input is validated before prediction.
 - Maximum URL length is restricted to 2048 characters.
 - Database credentials are stored in environment variables.
-- The .env file should never be uploaded to GitHub.
-- Machine Learning predictions are not a guarantee that a website is safe.
+- The `.env` file is excluded from Git tracking.
+- Predictions are estimates, not guarantees of website safety.
+- The model should be tested regularly against new phishing techniques.
 
-## 11. Future Improvements
+---
 
-- Deploy the application on a cloud platform.
-- Improve model performance on previously unseen domains.
-- Add more advanced phishing detection techniques.
-- Implement user authentication.
-- Add detailed security reports.
-- Set up CI/CD using GitHub Actions.
-- Add application monitoring and logging.
+## 🔮 Future Improvements
 
-## 12. Author
+- Improve detection on previously unseen domains.
+- Test the model using additional external datasets.
+- Add advanced phishing detection techniques.
+- Implement user authentication and individual scan histories.
+- Generate detailed security reports.
+- Add more detailed application monitoring and logging.
+- Improve model explainability.
 
-Lavanya Kapoor
+---
 
-B.Tech Student - Computer Science
+## 👩‍💻 Author
 
-GitHub:
+**Lavanya Kapoor**
+
+B.Tech Student – Computer Science and Business Systems
+
+GitHub:  
 https://github.com/Lavanyakapoor12
 
-Project:
-PhishGuard AI - AI-Powered Phishing URL Detection System
+**Project:** PhishGuard AI – AI-Powered Phishing URL Detection System
