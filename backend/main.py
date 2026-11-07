@@ -1,9 +1,11 @@
 
 from pathlib import Path
+import hmac
+import os
 
 import joblib
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from pydantic import BaseModel, HttpUrl, field_validator
@@ -189,3 +191,55 @@ def get_dashboard_stats(
         "legitimate_urls": legitimate_scans,
         "phishing_rate": phishing_rate
     }
+
+
+# Clear scan history (admin only).
+@app.delete("/history")
+def clear_scan_history(
+    x_admin_key: str = Header(
+        default="",
+        alias="X-Admin-Key"
+    ),
+    db: Session = Depends(get_db)
+):
+
+    # Read admin password from environment variables.
+    admin_secret = os.getenv("ADMIN_SECRET_KEY")
+
+    # Do not allow deletion if the secret is missing.
+    if not admin_secret:
+        raise HTTPException(
+            status_code=503,
+            detail="Admin access is not configured."
+        )
+
+    # Verify admin password securely.
+    if not hmac.compare_digest(
+        x_admin_key,
+        admin_secret
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid admin password."
+        )
+
+    try:
+        deleted_count = (
+            db.query(ScanHistory)
+            .delete(synchronize_session=False)
+        )
+
+        db.commit()
+
+        return {
+            "message": "Scan history cleared successfully.",
+            "deleted_count": deleted_count
+        }
+
+    except Exception:
+        db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to clear scan history."
+        )

@@ -1159,3 +1159,43 @@ footer {
     font-size: 23px;
   }
 }
+
+/* Clear History Feature */
+
+.history-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.clear-history-button {
+  padding: 10px 16px;
+  border: 1px solid #f04452;
+  border-radius: 8px;
+  background: transparent;
+  color: #f04452;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.clear-history-button:hover {
+  background: #f04452;
+  color: white;
+}
+
+.clear-history-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .history-actions {
+    width: 100%;
+  }
+
+  .history-actions button {
+    flex: 1;
+  }
+}
