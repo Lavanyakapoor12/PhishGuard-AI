@@ -14,6 +14,16 @@ Phishing websites are designed to steal sensitive information such as passwords,
 
 ---
 
+
+## 📸 Project Screenshots
+
+### PhishGuard AI Dashboard
+![PhishGuard AI Dashboard](screenshots/dashboard.png)
+
+### Analytics and Scan History
+![PhishGuard AI Analytics](screenshots/history.png)
+
+
 ## ✨ Key Features
 
 - AI-based phishing URL detection.
