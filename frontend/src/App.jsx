@@ -17,7 +17,10 @@ import {
 
 import "./App.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+// Backend API URL
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
 function App() {
   const [url, setUrl] = useState("");
   const [result, setResult] = useState(null);
@@ -135,7 +138,6 @@ function App() {
 
       setResult(data);
       await refreshDashboard();
-
     } catch (err) {
       setError(
         err.message === "Failed to fetch"
@@ -338,7 +340,6 @@ function App() {
 
         {/* Security Overview */}
         <section className="analytics-section">
-
           <div className="analytics-heading">
             <div>
               <h2>Security Overview</h2>
@@ -364,7 +365,6 @@ function App() {
 
           {/* Analytics Cards */}
           <div className="analytics-grid">
-
             <div className="analytics-card">
               <div className="analytics-icon purple">⌕</div>
               <p>Total Scans</p>
@@ -390,7 +390,6 @@ function App() {
                 {statsLoading ? "..." : `${stats.phishing_rate}%`}
               </h3>
             </div>
-
           </div>
 
           {/* Pie Chart */}
@@ -525,12 +524,10 @@ function App() {
               </div>
             )}
           </div>
-
         </section>
 
         {/* Scan History */}
         <section className="history-section">
-
           <div className="history-heading">
             <div>
               <h2>Recent Scan History</h2>
@@ -554,7 +551,6 @@ function App() {
 
           {/* Search and Filter */}
           <div className="history-controls">
-
             <div className="search-box">
               <span>🔍</span>
 
@@ -575,7 +571,6 @@ function App() {
               <option value="Phishing">Phishing Only</option>
               <option value="Legitimate">Legitimate Only</option>
             </select>
-
           </div>
 
           <div className="history-result-count">
@@ -641,12 +636,10 @@ function App() {
               </table>
             </div>
           )}
-
         </section>
 
         {/* Features */}
         <section className="features">
-
           <div className="feature-card">
             <div className="feature-icon purple">✦</div>
             <h3>AI-Powered Detection</h3>
@@ -671,7 +664,6 @@ function App() {
               Get a clear warning when a URL is classified as potentially malicious.
             </p>
           </div>
-
         </section>
 
         {/* Footer */}
