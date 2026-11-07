@@ -38,10 +38,16 @@ button:disabled {
   cursor: not-allowed;
 }
 
+#root {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
 .app {
   min-height: 100vh;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   background:
     radial-gradient(ellipse at 50% 0%, #17264a 0%, transparent 45%),
     #080d19;
@@ -150,6 +156,7 @@ button:disabled {
 .scanner-card {
   width: 100%;
   max-width: 850px;
+  min-width: 0;
   margin: 0 auto;
   padding: 35px;
   border: 1px solid #263750;
@@ -201,6 +208,7 @@ button:disabled {
   border-radius: 12px;
   background: #091323;
   min-width: 0;
+  width: 100%;
 }
 
 .input-icon {
@@ -535,6 +543,7 @@ button:disabled {
   height: 300px;
   margin-top: 15px;
   min-width: 0;
+  overflow: hidden;
 }
 
 .chart-message {
@@ -579,7 +588,7 @@ button:disabled {
   background: #20c997;
 }
 
-/* Chart Tooltips and Labels */
+/* Chart Tooltips */
 .recharts-tooltip-wrapper {
   outline: none;
 }
@@ -593,11 +602,6 @@ button:disabled {
 .recharts-tooltip-label,
 .recharts-tooltip-item {
   color: #f8fafc !important;
-}
-
-.recharts-legend-item-text {
-  color: #cbd5e1 !important;
-  font-size: 12px;
 }
 
 .recharts-cartesian-axis-tick-value {
@@ -636,6 +640,13 @@ button:disabled {
   line-height: 1.6;
 }
 
+.history-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .history-refresh {
   padding: 10px 16px;
   background: #263247;
@@ -652,6 +663,27 @@ button:disabled {
 
 .history-refresh:disabled {
   opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clear-history-button {
+  padding: 10px 16px;
+  border: 1px solid #f04452;
+  border-radius: 8px;
+  background: transparent;
+  color: #f04452;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.clear-history-button:hover {
+  background: #f04452;
+  color: white;
+}
+
+.clear-history-button:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -729,6 +761,7 @@ button:disabled {
 
 .history-table-wrapper {
   width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -857,6 +890,34 @@ footer {
   font-size: 12px;
 }
 
+/* Global text and width safety */
+.main-content,
+.scanner-card,
+.analytics-section,
+.chart-card,
+.history-section,
+.feature-card {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.hero h1,
+.hero p,
+.scanner-heading h2,
+.scanner-heading p,
+.analytics-heading h2,
+.analytics-heading p,
+.chart-heading h2,
+.chart-heading p,
+.history-heading h2,
+.history-heading p,
+.feature-card h3,
+.feature-card p,
+.result-top h3,
+.result-disclaimer {
+  overflow-wrap: anywhere;
+}
+
 /* Tablet Responsive */
 @media (max-width: 900px) {
   .navbar {
@@ -881,6 +942,7 @@ footer {
   .navbar {
     min-height: 68px;
     padding: 10px 4%;
+    flex-wrap: wrap;
   }
 
   .brand {
@@ -982,16 +1044,31 @@ footer {
   }
 
   .chart-container {
-    height: 270px;
+    height: 250px;
   }
 
   .history-controls {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .features {
     grid-template-columns: 1fr;
     margin-top: 40px;
+  }
+
+  .history-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .history-actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .history-actions button {
+    flex: 1 1 130px;
   }
 
   footer {
@@ -1004,17 +1081,8 @@ footer {
 
 /* Small Mobile */
 @media (max-width: 600px) {
-  .history-heading {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
   .history-section {
     padding: 18px;
-  }
-
-  .chart-percentages {
-    gap: 15px;
   }
 
   .analytics-grid {
@@ -1023,6 +1091,10 @@ footer {
 
   .analytics-card {
     padding: 18px;
+  }
+
+  .chart-percentages {
+    gap: 15px;
   }
 }
 
@@ -1055,16 +1127,22 @@ footer {
   }
 
   .hero {
-    padding-top: 50px;
+    padding: 50px 0 30px;
   }
 
   .hero h1 {
-    font-size: 30px;
+    font-size: clamp(27px, 8vw, 32px);
+    line-height: 1.25;
+    letter-spacing: -0.8px;
   }
 
   .scanner-card {
-    padding: 18px 14px;
+    padding: 18px 13px;
     border-radius: 14px;
+  }
+
+  .scanner-heading {
+    gap: 8px;
   }
 
   .scanner-heading h2 {
@@ -1075,16 +1153,40 @@ footer {
     font-size: 24px;
   }
 
+  .input-wrapper {
+    display: grid;
+    grid-template-columns: 25px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .input-icon {
+    padding-left: 4px;
+  }
+
+  .input-wrapper input {
+    width: 100%;
+    font-size: 12px;
+  }
+
+  .scan-button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
   .analytics-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .analytics-card {
-    padding: 18px;
+    padding: 14px 12px;
+  }
+
+  .analytics-card p {
+    font-size: 12px;
   }
 
   .analytics-card h3 {
-    font-size: 25px;
+    font-size: 23px;
   }
 
   .chart-card {
@@ -1100,18 +1202,22 @@ footer {
   }
 
   .chart-container {
-    height: 240px;
+    height: 230px;
   }
 
   .chart-percentages {
     flex-direction: column;
     align-items: flex-start;
-    padding-left: 15px;
+    padding-left: 10px;
     gap: 10px;
   }
 
+  .chart-percentages p {
+    font-size: 12px;
+  }
+
   .history-section {
-    padding: 15px 12px;
+    padding: 16px 11px;
   }
 
   .history-heading h2 {
@@ -1122,6 +1228,16 @@ footer {
     font-size: 12px;
   }
 
+  .history-actions {
+    width: 100%;
+  }
+
+  .history-actions button {
+    min-width: 0;
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+
   .result-top {
     align-items: flex-start;
     flex-direction: column;
@@ -1129,6 +1245,7 @@ footer {
 
   .probability-heading {
     font-size: 11px;
+    flex-wrap: wrap;
   }
 
   .feature-card {
@@ -1138,8 +1255,12 @@ footer {
 
 /* Extra Small Screens */
 @media (max-width: 360px) {
+  .main-content {
+    width: 95%;
+  }
+
   .brand {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .nav-status {
@@ -1155,47 +1276,19 @@ footer {
     font-size: 14px;
   }
 
+  .analytics-card {
+    padding: 12px 9px;
+  }
+
   .analytics-card h3 {
-    font-size: 23px;
-  }
-}
-
-/* Clear History Feature */
-
-.history-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.clear-history-button {
-  padding: 10px 16px;
-  border: 1px solid #f04452;
-  border-radius: 8px;
-  background: transparent;
-  color: #f04452;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.clear-history-button:hover {
-  background: #f04452;
-  color: white;
-}
-
-.clear-history-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-@media (max-width: 480px) {
-  .history-actions {
-    width: 100%;
+    font-size: 20px;
   }
 
-  .history-actions button {
-    flex: 1;
+  .chart-container {
+    height: 210px;
+  }
+
+  .result-card {
+    padding: 14px;
   }
 }

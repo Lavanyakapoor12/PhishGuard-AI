@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from pydantic import BaseModel, HttpUrl, field_validator
 
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from backend.database import engine, Base, SessionLocal
@@ -224,16 +225,36 @@ def clear_scan_history(
         )
 
     try:
-        deleted_count = (
-            db.query(ScanHistory)
-            .delete(synchronize_session=False)
+        # Get the table name from the SQLAlchemy model.
+        table = ScanHistory.__table__
+
+        # Safely quote the table name for PostgreSQL.
+        preparer = engine.dialect.identifier_preparer
+
+        if table.schema:
+            qualified_table = (
+                f"{preparer.quote_schema(table.schema)}."
+                f"{preparer.quote(table.name)}"
+            )
+        else:
+            qualified_table = preparer.quote(table.name)
+
+        # Count existing records before deleting them.
+        deleted_count = db.query(ScanHistory).count()
+
+        # Delete all records and reset the auto-increment ID.
+        db.execute(
+            text(
+                f"TRUNCATE TABLE {qualified_table} RESTART IDENTITY"
+            )
         )
 
         db.commit()
 
         return {
             "message": "Scan history cleared successfully.",
-            "deleted_count": deleted_count
+            "deleted_count": deleted_count,
+            "next_scan_id": 1
         }
 
     except Exception:
